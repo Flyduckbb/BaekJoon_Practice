@@ -127,7 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Day2\Day2\Day2.cpp" />
+    <ClCompile Include="..\..\PJT005\PJT005\PJT005.cpp" />
+    <ClCompile Include="..\..\Project3\Project3\Day3.cpp" />
+    <ClCompile Include="..\..\Project4\Project4\PJT004.cpp" />
     <ClCompile Include="BaekJoon.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
