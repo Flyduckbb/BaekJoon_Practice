@@ -10,7 +10,6 @@ int main() {
 
 	vector<vector<string>> cave(R, vector<string>(C));
 
-
 	for (int i = 0; i < R; ++i) {
 		for (int j = 0; j < C; ++j) {
 			cout << i << j;
