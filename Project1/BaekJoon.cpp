@@ -1,9 +1,10 @@
+/*
 #include <iostream>
 #include <math.h>
 #include <vector>
 
 using namespace std;
-/*
+
 //백준 '팰린드롬인지 확인하기' 10988번 (하) -> IDLE에서는 정상 작동하나 백준에서는 안됨 / 원인 파악 후 수정
 int main()
 {
@@ -85,7 +86,7 @@ int main()
 }
 */
 
-
+/*
 // 백준 '진법 변환' 2754번 (중)
 int main() {
     string str;
@@ -102,12 +103,5 @@ int main() {
         }
     }
     cout << result;
-}
-
-
-/*
-int main()
-{
-
 }
 */
