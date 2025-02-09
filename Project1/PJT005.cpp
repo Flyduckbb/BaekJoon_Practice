@@ -10,8 +10,6 @@
 #include <cmath>
 
 #define P pair<int, int>
-//#define F first
-//#define S second
 #define INF 987654321
 
 using namespace std;
@@ -24,6 +22,34 @@ int dy[4] = { 1, 0, -1, 0 };
 int Stick_Cnt;
 vector<int> Throw;
 vector<P> Move;
+
+// 메모리 초기화 함수
+void reset() {
+	memset(check, 0, sizeof(check));
+	Move.clear();
+}
+
+//지도 구현하는 함수
+void remake_map() {
+	int down = INF;
+	for (int i = 0; i < Move.size(); i++) {
+		int cnt = drop_Cluster(Move[i].first, Move[i].second);
+		if (cnt == INF)
+			continue;
+		else
+			down = min(cnt, down);
+	}
+	if (down == INF)
+		return;
+	for (int i = 0; i < Move.size(); i++) {
+		int x = Move[i].first, y = Move[i].second;
+		map[x][y] = '.';
+	}
+	for (int i = 0; i < Move.size(); i++) {
+		int x = Move[i].first, y = Move[i].second;
+		map[x + down][y] = 'x';
+	}
+}
 
 // 막대기를 던져 미네랄을 파괴하는 함수
 void hit_mineral(int x, int dir) {
@@ -101,4 +127,41 @@ int drop_Cluster(int x, int y) {
 		}
 		return cnt;
 	}
+}
+
+void show_map() {
+	for (int i = 1; i <= R; i++) {
+		for (int j = 1; j <= C; j++) {
+			cout << map[i][j];
+		}
+	}
+}
+
+int main() {
+	cin.tie(0);
+	cout.tie(0);
+	
+	cin >> R >> C;
+	for (int i = 1; i <= R; i++) {
+		for (int j = 1; j <= C; j++) {
+			cin >> map[i][j];
+		}
+	}
+	
+	cin >> Stick_Cnt;
+	for (int i = 1; i <= Stick_Cnt; i++) {
+		int x;
+		cin >> x;
+		Throw.push_back(x);
+	}
+
+	for (int i = 0; i < Throw.size(); i++) {
+		reset();
+		hit_mineral(Throw[i], i);
+		if (!find_cluster())
+			continue;
+		remake_map();
+	}
+	show_map();
+	return 0;
 }
