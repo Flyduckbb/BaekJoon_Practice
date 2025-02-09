@@ -1,3 +1,5 @@
+// 백준 2933번 미네랄
+
 #include <iostream>
 #include <vector>
 #include <string>
