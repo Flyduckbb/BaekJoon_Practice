@@ -13,7 +13,6 @@
 #define INF 987654321
 
 using namespace std;
-
 int R, C;
 char map[101][101];
 int check[101][101];
@@ -27,6 +26,63 @@ vector<P> Move;
 void reset() {
 	memset(check, 0, sizeof(check));
 	Move.clear();
+}
+
+// 막대기를 던져 미네랄을 파괴하는 함수
+void hit_mineral(int x, int dir) {
+	if (dir % 2 == 0) { // 왼쪽에서 오른쪽
+		for (int y = 1; y <= C; y++) {
+			if (map[R - x + 1][y] == 'x') {
+				map[R - x + 1][y] = '.';
+				break;
+			}
+		}
+	}
+	else { // 오른쪽에서 왼쪽
+		for (int y = C; y >= 1; y--) {
+			if (map[R - x + 1][y] == 'x') {
+				map[R - x + 1][y] = '.';
+				break;
+			}
+		}
+	}
+}
+
+
+// BFS (너비우선 탐색)
+void bfs(int X, int Y) {
+	queue<P> q;
+	q.push({ X, Y });
+	check[X][Y] = 1;
+	while (!q.empty()) {
+		int x = q.front().first;
+		int y = q.front().second;
+		q.pop();
+		for (int i = 0; i < 4; i++) {
+			int xx = x + dx[i];
+			int yy = y + dy[i];
+			if (xx >= 1 && xx <= R && yy >= 1 && yy <= C) {
+				if (check[xx][yy] == 0 && map[xx][yy] == 'x') {
+					check[xx][yy] = 1;
+					q.push({ xx, yy });
+				}
+			}
+		}
+	}
+}
+
+// 클러스터를 바닥으로 떨어뜨리는 함수
+int drop_Cluster(int x, int y) {
+	int cnt = 0;
+	for (int i = x + 1; i <= R; i++) {
+		if (map[i][y] == 'x') {
+			if (check[i][y] == 0)
+				return INF;
+			else
+				return cnt + i;
+		}
+		return cnt;
+	}
 }
 
 //지도 구현하는 함수
@@ -51,59 +107,11 @@ void remake_map() {
 	}
 }
 
-// 막대기를 던져 미네랄을 파괴하는 함수
-void hit_mineral(int x, int dir) {
-	if (dir % 2 == 0) {
-		int y = 1;
-		while (1) {
-			if (y > C) break;
-			if (map[R - x + 1][y] == 'x') {
-				map[R - x + 1][y] = '.';
-				break;
-			}
-		}
-		y++;
-	}
-	else {
-		int y = C;
-		while (1) {
-			if (y < 1) break;
-			if (map[R - x + 1][y] == 'x') {
-				map[R - x + 1][y] = '.';
-				break;
-			}
-		}
-		y--;
-	}
-}
-
-// BFS (너비우선 탐색)
-void bfs(int X, int Y) {
-	queue<P> q;
-	q.push({ X, Y });
-	check[X][Y] = 1;
-	while (!q.empty()) {
-		int x = q.front().first;
-		int y = q.front().second;
-		q.pop();
-		for (int i = 0; i < 4; i++) {
-			int xx = x + dx[i];
-			int yy = y + dy[i];
-			if (xx >= 1 && xx <= R && yy >= 1 && yy <= C) {
-				if (check[xx][yy] == 0 && map[xx][yy] == 'x') {
-					check[xx][yy] = 1;
-					q.push({ xx, yy });
-				}
-			}
-		}
-	}
-}
-
 // 공중에 떠 있는 클러스터 찾는 함수
 bool find_cluster() {
 	bool can = false;
 	for (int i = 1; i <= C; i++) {
-		if (check[R][1] == 0 && map[C][i] == 'x') bfs(R, i);
+		if (check[R][1] == 0 && map[R][i] == 'x') bfs(R, i);
 	}
 	for (int i = 1; i <= R; i++) {
 		for (int j = 1; j <= C; j++) {
@@ -113,28 +121,29 @@ bool find_cluster() {
 			}
 		}
 	}
+	return can;
 }
 
-// 클러스터를 바닥으로 떨어뜨리는 함수
-int drop_Cluster(int x, int y) {
-	int cnt = 0;
-	for (int i = x + 1; i <= R; i++) {
-		if (map[i][y] == 'x') {
-			if (check[i][y] == 0)
-				return INF;
-			else
-				return cnt++;
-		}
-		return cnt;
-	}
-}
-
+// 지도 출력하는 함수
 void show_map() {
 	for (int i = 1; i <= R; i++) {
 		for (int j = 1; j <= C; j++) {
 			cout << map[i][j];
 		}
+		cout << "\n";
 	}
+	cout << "\n";
+}
+
+void solve() {
+	for (int i = 0; i < Throw.size(); i++) {
+		reset();
+		hit_mineral(Throw[i], i);
+		if (!find_cluster())
+			continue;
+		remake_map();
+	}
+	show_map();
 }
 
 int main() {
@@ -154,14 +163,6 @@ int main() {
 		cin >> x;
 		Throw.push_back(x);
 	}
-
-	for (int i = 0; i < Throw.size(); i++) {
-		reset();
-		hit_mineral(Throw[i], i);
-		if (!find_cluster())
-			continue;
-		remake_map();
-	}
-	show_map();
+	solve();
 	return 0;
 }
