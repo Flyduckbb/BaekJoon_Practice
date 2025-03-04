@@ -192,10 +192,30 @@ using namespace std;
 
 #define P pair<int, int>
 
-int N, K;   // N은 보드의 크기, K는 사과의 개수
+int N, K, L;   // N은 보드의 크기, K는 사과의 개수, L은 뱀의 방향 변환 횟수
 char map[101][101];
 int check[101][101];
 int dx[4] = { 0, 1, 0, -1 };
 int dy[4] = { 1, 0, -1, 0 };
 vector<P> Apple;
 
+int X;
+char C; // 뱀의 방향 변환 정보 - X : 초 / C : L인 경우 왼쪽 90도, D인 경우 오른쪽 90도
+        // 방향 변환 정보는 X가 증가하는 순으로 주어짐
+
+
+
+
+int main() {
+    cin.tie(0);
+    cout.tie(0);
+
+    cin >> N >> K;
+
+    for (int i = 0; i < K; i++) {
+        
+    }
+
+
+    return 0;
+}
